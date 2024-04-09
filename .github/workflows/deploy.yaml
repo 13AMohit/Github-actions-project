@@ -46,7 +46,7 @@ jobs:
           file: ./Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: public.ecr.aws/t2g9s6k7/react-app:latest
+          tags: ${{ steps.login-ecr.outputs.registry }}/react-app:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
 
