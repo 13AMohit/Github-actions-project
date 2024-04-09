@@ -20,7 +20,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::577573027390:role/github-cicd
           role-session-name: Mohitrolesession
-          aws-region: us-east-1
+          aws-region: ap-south-1
 
       - name: Setup build
         id: buildx
