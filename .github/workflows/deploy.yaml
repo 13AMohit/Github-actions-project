@@ -1,0 +1,27 @@
+name: Deploy ECS workflow
+
+on:
+  push:
+    branches: [main]
+    
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read  
+
+jobs:
+  Deploy-ECS:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v4
+
+      - name: AWS configure
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: arn:aws:iam::577573027390:role/github-cicd
+          role-session-name: Mohitrolesession
+          aws-region: us-east-1
+
+      - run : |
+          aws s3 ls
+  
