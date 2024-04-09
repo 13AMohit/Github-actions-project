@@ -78,4 +78,12 @@ jobs:
       - name: Task Defintion ARN
         run: |
           echo "Task Defintion: ${{ steps.taskdefintionvar.outputs.task_definition_arn }}"
-        
+
+      - name: Deploy ECS Task Definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: react-app-service
+          cluster: react-app-cluster
+          wait-for-service-stability: true
+          wait-for-minutes: 10
