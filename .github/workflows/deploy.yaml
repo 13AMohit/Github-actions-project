@@ -53,6 +53,7 @@ jobs:
         run: |
           aws ecs describe-task-definition --task-definition ${{ secrets.TASK_DEF }} \
           --query taskDefinition > task-definition.json 
+          
       - name: New image ID in the Amazon ECS task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
@@ -61,11 +62,14 @@ jobs:
           container-name: default
           image: ${{ steps.login-ecr.outputs.registry }}/react-app:mohit
 
-      - name: Deploy Amazon ECS task definition
+      - name: Deploy ECS Task
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
-          wait-for-service-stability: false
+          service: react-app-service
+          cluster: react-app-cluster
+          wait-for-service-stability: true
+          wait-for-minutes: 10
 
       - name: Task Definition Variable
         id: taskdefintionvar
@@ -75,11 +79,3 @@ jobs:
       - name: Task Defintion ARN
         run: |
           echo "Task Defintion: ${{ steps.taskdefintionvar.outputs.task_definition_arn }}"
-      - name: Deploy ECS Task
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: react-app-service
-          cluster: react-app-cluster
-          wait-for-service-stability: true
-          wait-for-minutes: 10
