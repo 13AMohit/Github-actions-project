@@ -52,8 +52,8 @@ jobs:
 
       - name: Download task definition
         run: |
-          aws ecs describe-task-definition --task-definition ${{ secrets.TASK_DEF }} \
-          --query taskDefinition > task-definition.json 
+          aws ecs describe-task-definition --task-definition react-app-td \
+          --query taskDefinition > task-definition.json
 
       - name: New image ID in the Amazon ECS task definition
         id: task-def
@@ -62,7 +62,7 @@ jobs:
           task-definition: task-definition.json
           container-name: default
           image: ${{ steps.login-ecr.outputs.registry }}/react-app:mohit
-
+          
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
@@ -73,7 +73,7 @@ jobs:
         id: taskdefintionvar
         shell: bash
         run: |
-          echo "task_definition_arn=$(aws ecs describe-task-definition --task-definition ${{ secrets.TASK_DEF }} | jq '.[] | .taskDefinitionArn')" >> $GITHUB_OUTPUT
+          echo "task_definition_arn=$(aws ecs describe-task-definition --task-definition react-app-td | jq '.[] | .taskDefinitionArn')" >> $GITHUB_OUTPUT
 
       - name: Task Defintion ARN
         run: |
